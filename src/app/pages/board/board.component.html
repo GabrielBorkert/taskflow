@@ -1,0 +1,79 @@
+<div class="board-container">
+  <section class="new-task-card">
+    <h2>Nova tarefa</h2>
+    <input
+      type="text"
+      placeholder="Título"
+      [(ngModel)]="newTitle"
+    />
+    <textarea
+      rows="3"
+      placeholder="Descrição (opcional)"
+      [(ngModel)]="newDescription"
+    ></textarea>
+    <button (click)="createTask()">Adicionar</button>
+  </section>
+
+  <section class="board">
+    <div class="column">
+      <h3>To Do</h3>
+      <ng-container *ngIf="tasks$ | async as tasks">
+        <div
+          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.ToDo)"
+          class="task-card"
+        >
+          <h4>{{ task.title }}</h4>
+          <p *ngIf="task.description">{{ task.description }}</p>
+          <small>Criada em: {{ task.createdAt | date: 'short' }}</small>
+          <div class="actions">
+            <button (click)="moveTo(task, TaskStatus.InProgress)">
+              → In Progress
+            </button>
+            <button (click)="deleteTask(task)">Excluir</button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="column">
+      <h3>In Progress</h3>
+      <ng-container *ngIf="tasks$ | async as tasks">
+        <div 
+          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.InProgress)"
+          class="task-card"
+        >
+          <h4>{{ task.title }}</h4>
+          <p *ngIf="task.description">{{ task.description }}</p>
+          <div class="actions">
+            <button (click)="moveTo(task, TaskStatus.ToDo)">
+              ← To Do
+            </button>
+            <button (click)="moveTo(task, TaskStatus.Done)">
+              → Done
+            </button>
+            <button (click)="deleteTask(task)">Excluir</button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="column">
+      <h3>Done</h3>
+      <ng-container *ngIf="tasks$ | async as tasks">
+        <div
+          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.Done)"
+          class="task-card"
+        >
+          <h4>{{ task.title }}</h4>
+          <p *ngIf="task.description">{{ task.description }}</p>
+          <div class="actions">
+            <button (click)="moveTo(task, TaskStatus.InProgress)">
+              ← In Progress
+            </button>
+            <button (click)="deleteTask(task)">Excluir</button>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </section>
+</div>
