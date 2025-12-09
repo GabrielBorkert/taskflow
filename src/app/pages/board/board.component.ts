@@ -5,12 +5,22 @@ import { TaskService } from '../../services/task.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
 
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatCardModule }    from '@angular/material/card';
+import { MatButtonModule }  from '@angular/material/button';
+import { MatInputModule }   from '@angular/material/input';
+import { MatIconModule }    from '@angular/material/icon';
+
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePipe]
+  imports: [CommonModule, FormsModule, DatePipe, MatToolbarModule,
+    MatCardModule,
+    MatButtonModule,
+    MatInputModule,
+    MatIconModule,]
 })
 export class BoardComponent implements OnInit {
   tasks$: Observable<Task[]>;

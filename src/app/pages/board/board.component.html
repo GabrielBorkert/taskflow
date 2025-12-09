@@ -1,79 +1,114 @@
-<div class="board-container">
-  <section class="new-task-card">
-    <h2>Nova tarefa</h2>
-    <input
-      type="text"
-      placeholder="Título"
-      [(ngModel)]="newTitle"
-    />
-    <textarea
-      rows="3"
-      placeholder="Descrição (opcional)"
-      [(ngModel)]="newDescription"
-    ></textarea>
-    <button (click)="createTask()">Adicionar</button>
-  </section>
+<mat-toolbar color="primary">
+  <span>TaskFlow</span>
+</mat-toolbar>
 
-  <section class="board">
+<div class="board-container">
+
+  <!-- Card de nova tarefa -->
+  <mat-card class="new-task-card">
+    <mat-card-title>Nova tarefa</mat-card-title>
+    <mat-card-content>
+      <div class="new-task-form mt-3">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Título</mat-label>
+          <input matInput [(ngModel)]="newTitle" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Descrição (opcional)</mat-label>
+          <textarea matInput rows="3" [(ngModel)]="newDescription"></textarea>
+        </mat-form-field>
+
+        <div style="text-align: center;">
+          <button class="btn-primary" (click)="createTask()">
+            Adicionar
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Board Kanban -->
+  <div class="board">
     <div class="column">
       <h3>To Do</h3>
       <ng-container *ngIf="tasks$ | async as tasks">
-        <div
-          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.ToDo)"
+        <mat-card
           class="task-card"
+          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.ToDo)"
         >
-          <h4>{{ task.title }}</h4>
-          <p *ngIf="task.description">{{ task.description }}</p>
-          <small>Criada em: {{ task.createdAt | date: 'short' }}</small>
-          <div class="actions">
-            <button (click)="moveTo(task, TaskStatus.InProgress)">
-              → In Progress
+          <mat-card-title>{{ task.title }}</mat-card-title>
+          <mat-card-subtitle *ngIf="task.createdAt">
+            Criada em: {{ task.createdAt | date: 'short' }}
+          </mat-card-subtitle>
+          <mat-card-content>
+            <p *ngIf="task.description">{{ task.description }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button color="primary"
+                    (click)="moveTo(task, TaskStatus.InProgress)">
+              In Progress
             </button>
-            <button (click)="deleteTask(task)">Excluir</button>
-          </div>
-        </div>
+            <button mat-button color="warn"
+                    (click)="deleteTask(task)">
+              Excluir
+            </button>
+          </mat-card-actions>
+        </mat-card>
       </ng-container>
     </div>
 
     <div class="column">
       <h3>In Progress</h3>
       <ng-container *ngIf="tasks$ | async as tasks">
-        <div 
-          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.InProgress)"
+        <mat-card
           class="task-card"
+          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.InProgress)"
         >
-          <h4>{{ task.title }}</h4>
-          <p *ngIf="task.description">{{ task.description }}</p>
-          <div class="actions">
-            <button (click)="moveTo(task, TaskStatus.ToDo)">
-              ← To Do
+          <mat-card-title>{{ task.title }}</mat-card-title>
+          <mat-card-content>
+            <p *ngIf="task.description">{{ task.description }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button (click)="moveTo(task, TaskStatus.ToDo)">
+              Voltar para To Do
             </button>
-            <button (click)="moveTo(task, TaskStatus.Done)">
-              → Done
+            <button mat-button color="primary"
+                    (click)="moveTo(task, TaskStatus.Done)">
+              Done
             </button>
-            <button (click)="deleteTask(task)">Excluir</button>
-          </div>
-        </div>
+            <button mat-button color="warn"
+                    (click)="deleteTask(task)">
+              Excluir
+            </button>
+          </mat-card-actions>
+        </mat-card>
       </ng-container>
     </div>
 
     <div class="column">
       <h3>Done</h3>
       <ng-container *ngIf="tasks$ | async as tasks">
-        <div
-          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.Done)"
+        <mat-card
           class="task-card"
+          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.Done)"
         >
-          <h4>{{ task.title }}</h4>
-          <p *ngIf="task.description">{{ task.description }}</p>
-          <div class="actions">
-            <button (click)="moveTo(task, TaskStatus.InProgress)">
-              ← In Progress
+          <mat-card-title>{{ task.title }}</mat-card-title>
+          <mat-card-content>
+            <p *ngIf="task.description">{{ task.description }}</p>
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button
+                    (click)="moveTo(task, TaskStatus.InProgress)">
+              Voltar para In Progress
             </button>
-            <button (click)="deleteTask(task)">Excluir</button>
-          </div>
-        </div>
+            <button mat-button color="warn"
+                    (click)="deleteTask(task)">
+              Excluir
+            </button>
+          </mat-card-actions>
+        </mat-card>
       </ng-container>
     </div>
-  </section>
+  </div>
 </div>
