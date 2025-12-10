@@ -1,8 +1,23 @@
-/* You can add global styles to this file, and also import other style files */
+/* ---------------------------------------- */
+/* GLOBAL RESET & FONT                      */
+/* ---------------------------------------- */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
 
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  /* PALETA AZUL PROFISSIONAL */
+  background-color: #F5F7FA; /* fundo claro e profissional */
+  color: #1F2D3D; /* texto principal */
+}
+
+/* ---------------------------------------- */
+/* SPACING UTILITIES (mantive as suas classes) */
+/* ---------------------------------------- */
 
 .m-1 { margin: 4px; }
 .mt-1 { margin-top: 4px; }
@@ -24,35 +39,95 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mb-4 { margin-bottom: 24px; }
 .p-4 { padding: 24px; }
 
+/* ---------------------------------------- */
+/* ANGULAR MATERIAL COMPONENTS              */
+/* ---------------------------------------- */
 
-body {
-  background-color: #a3a3a3;
-  color: #a8b2e9;
-}
-
-mat-card {
-  background: #1b1f36 !important;
-  color: #e0e0e0 !important;
-}
-
+/* Toolbar */
 mat-toolbar {
-  background: #1b1f36 !important;
-  color: #ffffff !important;
+  background-color: #2F80ED !important; /* primary */
+  color: #FFFFFF !important;
+  font-size: 18px;
+  font-weight: 500;
 }
+
+/* Cards */
+mat-card {
+  background-color: #FFFFFF !important; /* white surface */
+  color: #1F2D3D !important;
+  border: 1px solid #E0E6ED; /* borda leve */
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+}
+
+/* Form fields */
+.mat-mdc-text-field-wrapper {
+  background-color: #FFFFFF !important;
+  border-radius: 6px !important;
+  border: 1px solid #E0E6ED !important;
+}
+
+.mat-mdc-form-field-label {
+  color: #5D6D7E !important; /* texto secundário */
+}
+
+/* ---------------------------------------- */
+/* BUTTONS — PRIMÁRIOS E HOVER             */
+/* ---------------------------------------- */
 
 .btn-primary {
-    color: #19191a !important;
-    background-color: #c8d1fa !important;
-    width: 100px !important;
-    height: 30px !important;
-    border-radius: 4px;
-    border: 1px;
-    box-shadow: none;
-    padding: 8px;
+  color: #FFFFFF !important;
+  background-color: #2F80ED !important; /* primary */
+  width: 110px;
+  height: 36px;
+  border-radius: 6px;
+  border: none;
+  box-shadow: none;
+  padding: 8px 12px;
+  font-weight: 500;
+  transition: 0.2s ease;
 }
 
-.btn-primary:hover{
-    background-color: #030366 !important;
-    color: #c8d1fa !important;
-    border: #c8d1fa !important
+.btn-primary:hover {
+  background-color: #1C6FD3 !important; /* hover */
+  cursor: pointer;
+}
+
+/* BOTÃO SECUNDÁRIO (caso queira usar também) */
+.btn-secondary {
+  color: #2F80ED !important;
+  background: #EAF2FF !important;
+  border: 1px solid #2F80ED !important;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-weight: 500;
+}
+
+.btn-secondary:hover {
+  background: #D8E6FF !important;
+}
+
+/* ---------------------------------------- */
+/* HEADERS (como títulos das colunas)       */
+/* ---------------------------------------- */
+
+.column-title, h3 {
+  color: #1F2D3D;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* ---------------------------------------- */
+/* BOARD & COLUMNS LAYOUT                   */
+/* ---------------------------------------- */
+
+.board {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.column {
+  flex: 1;
+  min-width: 280px;
 }
