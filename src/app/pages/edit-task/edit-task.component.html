@@ -1,1 +1,22 @@
-<p>edit-task works!</p>
+<mat-card class="p-3">
+    <mat-card-title>Editar tarefa</mat-card-title>
+    <mat-card-content>
+        <div class=" mt-3">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Título</mat-label>
+                <input matInput [(ngModel)]="task.title" />
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Descrição (opcional)</mat-label>
+                <textarea matInput rows="3" [(ngModel)]="task.description"></textarea>
+            </mat-form-field>
+
+            <div style="text-align: center;">
+                <button class="btn-primary" (click)="closeModal()">
+                    Salvar
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

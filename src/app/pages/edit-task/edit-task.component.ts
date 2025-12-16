@@ -1,11 +1,36 @@
-import { Component } from '@angular/core';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Component, Inject, Input } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { Task } from '../../models/task.model';
 
 @Component({
   selector: 'app-edit-task',
-  imports: [],
+  imports: [CommonModule, FormsModule, MatToolbarModule, MatCardModule, MatButtonModule, MatInputModule, MatIconModule],
   templateUrl: './edit-task.component.html',
   styleUrl: './edit-task.component.css'
 })
 export class EditTaskComponent {
+    task: Task;
 
+    constructor(
+      public dialogRef: MatDialogRef<EditTaskComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
+      this.task = data;
+    }
+
+
+    closeModal(): void {
+      this.dialogRef.close();
+    }
+
+    confirmModal(): void {
+    this.dialogRef.close(true);
+  }
 }

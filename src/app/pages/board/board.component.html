@@ -48,6 +48,10 @@
                     (click)="moveTo(task, TaskStatus.InProgress)">
               In Progress
             </button>
+            <button mat-button color="primary"
+                    (click)="openModal(task)">  
+              Editar                  
+            </button>
             <button mat-button color="warn"
                     (click)="deleteTask(task)">
               Excluir
