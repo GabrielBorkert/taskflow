@@ -34,9 +34,8 @@
       <h3>To Do</h3>
       <ng-container *ngIf="tasks$ | async as tasks">
         <mat-card
-          class="task-card"
-          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.ToDo)"
-        >
+          class="task-card p-2"
+          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.ToDo)">
           <mat-card-title>{{ task.title }}</mat-card-title>
           <mat-card-subtitle *ngIf="task.createdAt">
             Criada em: {{ task.createdAt | date: 'short' }}
@@ -62,7 +61,7 @@
       <h3>In Progress</h3>
       <ng-container *ngIf="tasks$ | async as tasks">
         <mat-card
-          class="task-card"
+          class="task-card p-2"
           *ngFor="let task of getTasksByStatus(tasks, TaskStatus.InProgress)"
         >
           <mat-card-title>{{ task.title }}</mat-card-title>
@@ -90,7 +89,7 @@
       <h3>Done</h3>
       <ng-container *ngIf="tasks$ | async as tasks">
         <mat-card
-          class="task-card"
+          class="task-card p-2"
           *ngFor="let task of getTasksByStatus(tasks, TaskStatus.Done)"
         >
           <mat-card-title>{{ task.title }}</mat-card-title>
