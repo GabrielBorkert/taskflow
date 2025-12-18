@@ -25,7 +25,6 @@ export class EditTaskComponent {
       this.task = data;
     }
 
-
     closeModal(): void {
       this.dialogRef.close();
     }
