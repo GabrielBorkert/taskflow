@@ -16,3 +16,8 @@ backend/**/bin/
 backend/**/obj/
 backend/**/*.user
 backend/**/*.suo
+
+# Banco de dados SQLite 
+*.db
+*.db-shm
+*.db-wal
