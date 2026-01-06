@@ -4,38 +4,38 @@
 
 <div class="board-container">
 
-  <!-- Card de nova tarefa -->
-  <mat-card class="new-task-card">
-    <mat-card-title>Nova tarefa</mat-card-title>
-    <mat-card-content>
-      <div class="new-task-form mt-3">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Título</mat-label>
-          <input matInput [(ngModel)]="newTitle" />
-        </mat-form-field>
+  <form [formGroup]="form">
+    <mat-card class="new-task-card">
+      <mat-card-title>Nova tarefa</mat-card-title>
+      <mat-card-content>
+        <div class="new-task-form mt-3">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Título</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Descrição (opcional)</mat-label>
-          <textarea matInput rows="3" [(ngModel)]="newDescription"></textarea>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descrição (opcional)</mat-label>
+            <textarea matInput rows="3" formControlName="description"></textarea>
+          </mat-form-field>
 
-        <div style="text-align: center;">
-          <button class="btn-primary" (click)="createTask()">
-            Adicionar
-          </button>
+          <div style="text-align: center;">
+            <button class="btn-primary" (click)="createTask()">
+              Adicionar
+            </button>
+          </div>
         </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      </mat-card-content>
+    </mat-card>
+  </form>
 
-  <!-- Board Kanban -->
   <div class="board">
     <div class="column">
       <h3>To Do</h3>
-      <ng-container *ngIf="tasks$ | async as tasks">
+      <ng-container *ngIf="tasks">
         <mat-card
           class="task-card p-2"
-          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.ToDo)">
+          *ngFor="let task of tasks">
           <mat-card-title>{{ task.title }}</mat-card-title>
           <mat-card-subtitle *ngIf="task.createdAt">
             Criada em: {{ task.createdAt | date: 'short' }}
@@ -44,16 +44,13 @@
             <p *ngIf="task.description">{{ task.description }}</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button color="primary"
-                    (click)="moveTo(task, TaskStatus.InProgress)">
+            <button mat-button color="primary">
               In Progress
             </button>
-            <button mat-button color="primary"
-                    (click)="openModal(task)">  
+            <button mat-button color="primary">  
               Editar                  
             </button>
-            <button mat-button color="warn"
-                    (click)="deleteTask(task)">
+            <button mat-button color="warn">
               Excluir
             </button>
           </mat-card-actions>
@@ -63,25 +60,23 @@
 
     <div class="column">
       <h3>In Progress</h3>
-      <ng-container *ngIf="tasks$ | async as tasks">
+      <ng-container *ngIf="tasks">
         <mat-card
           class="task-card p-2"
-          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.InProgress)"
+          *ngFor="let task of tasks"
         >
           <mat-card-title>{{ task.title }}</mat-card-title>
           <mat-card-content>
             <p *ngIf="task.description">{{ task.description }}</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button (click)="moveTo(task, TaskStatus.ToDo)">
+            <button mat-button>
               Voltar para To Do
             </button>
-            <button mat-button color="primary"
-                    (click)="moveTo(task, TaskStatus.Done)">
+            <button mat-button color="primary">
               Done
             </button>
-            <button mat-button color="warn"
-                    (click)="deleteTask(task)">
+            <button mat-button color="warn">
               Excluir
             </button>
           </mat-card-actions>
@@ -91,22 +86,20 @@
 
     <div class="column">
       <h3>Done</h3>
-      <ng-container *ngIf="tasks$ | async as tasks">
+      <ng-container *ngIf="tasks">
         <mat-card
           class="task-card p-2"
-          *ngFor="let task of getTasksByStatus(tasks, TaskStatus.Done)"
+          *ngFor="let task of tasks"
         >
           <mat-card-title>{{ task.title }}</mat-card-title>
           <mat-card-content>
             <p *ngIf="task.description">{{ task.description }}</p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button
-                    (click)="moveTo(task, TaskStatus.InProgress)">
+            <button mat-button>
               Voltar para In Progress
             </button>
-            <button mat-button color="warn"
-                    (click)="deleteTask(task)">
+            <button mat-button color="warn">
               Excluir
             </button>
           </mat-card-actions>
