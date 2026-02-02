@@ -23,6 +23,7 @@ namespace TaskFlow.Infrastructure.Data
                 entity.Property(e => e.Title).IsRequired().HasMaxLength(200);
                 entity.Property(e => e.Description).HasMaxLength(1000);
                 entity.Property(e => e.CreatedAt).IsRequired();
+                entity.Property(e => e.Status);
             });
         }
     }

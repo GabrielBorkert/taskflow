@@ -32,7 +32,8 @@ namespace TaskFlow.Application.Services
                 Title = createTaskDto.Title,
                 Description = createTaskDto.Description,
                 IsCompleted = false,
-                CreatedAt = DateTime.UtcNow
+                CreatedAt = DateTime.UtcNow,
+                Status = createTaskDto.Status,
             };
 
             var createdTask = await _taskRepository.CreateAsync(task);
@@ -76,7 +77,8 @@ namespace TaskFlow.Application.Services
                 Title = task.Title,
                 Description = task.Description,
                 IsCompleted = task.IsCompleted,
-                CreatedAt = task.CreatedAt
+                CreatedAt = task.CreatedAt,
+                Status = (int)task.Status,
             };
         }
     }

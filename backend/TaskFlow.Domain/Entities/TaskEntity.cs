@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TaskFlow.Domain.Enums;
 
 namespace TaskFlow.Domain.Entities
 {
@@ -14,5 +15,6 @@ namespace TaskFlow.Domain.Entities
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
+        public TaskItemStatus Status { get; set; }
     }
 }

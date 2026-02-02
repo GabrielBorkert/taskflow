@@ -37,7 +37,7 @@ namespace TaskFlow.API.Controllers
 
         // POST: api/tasks
         [HttpPost]
-        public async Task<ActionResult<TaskDto>> CreateTask([FromBody] CreateTaskDto createTaskDto)
+        public async Task<ActionResult<TaskDto>> CreateTask(CreateTaskDto createTaskDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
