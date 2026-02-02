@@ -36,24 +36,26 @@
         <mat-card
           class="task-card p-2"
           *ngFor="let task of tasks">
-          <mat-card-title>{{ task.title }}</mat-card-title>
-          <mat-card-subtitle *ngIf="task.createdAt">
-            Criada em: {{ task.createdAt | date: 'short' }}
-          </mat-card-subtitle>
-          <mat-card-content>
-            <p *ngIf="task.description">{{ task.description }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-button color="primary">
-              In Progress
-            </button>
-            <button mat-button color="primary">  
-              Editar                  
-            </button>
-            <button mat-button color="warn">
-              Excluir
-            </button>
-          </mat-card-actions>
+          @if(task.status == TaskItemStatus.ToDo){
+            <mat-card-title>{{ task.title }}</mat-card-title>
+            <mat-card-subtitle *ngIf="task.createdAt">
+              Criada em: {{ task.createdAt | date: 'short' }}
+            </mat-card-subtitle>
+            <mat-card-content>
+              <p *ngIf="task.description">{{ task.description }}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button color="primary">
+                In Progress
+              </button>
+              <button mat-button color="primary">  
+                Editar                  
+              </button>
+              <button mat-button color="warn" (click)="deleteTask(task.id)">
+                Excluir
+              </button>
+            </mat-card-actions>
+          }
         </mat-card>
       </ng-container>
     </div>
@@ -63,23 +65,24 @@
       <ng-container *ngIf="tasks">
         <mat-card
           class="task-card p-2"
-          *ngFor="let task of tasks"
-        >
-          <mat-card-title>{{ task.title }}</mat-card-title>
-          <mat-card-content>
-            <p *ngIf="task.description">{{ task.description }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-button>
-              Voltar para To Do
-            </button>
-            <button mat-button color="primary">
-              Done
-            </button>
-            <button mat-button color="warn">
-              Excluir
-            </button>
-          </mat-card-actions>
+          *ngFor="let task of tasks">
+          @if(task.status == TaskItemStatus.InProgress){
+            <mat-card-title>{{ task.title }}</mat-card-title>
+            <mat-card-content>
+              <p *ngIf="task.description">{{ task.description }}</p>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-button>
+                Voltar para To Do
+              </button>
+              <button mat-button color="primary">
+                Done
+              </button>
+              <button mat-button color="warn" (click)="deleteTask(task.id)">
+                Excluir
+              </button>
+            </mat-card-actions>
+          }
         </mat-card>
       </ng-container>
     </div>
@@ -89,20 +92,21 @@
       <ng-container *ngIf="tasks">
         <mat-card
           class="task-card p-2"
-          *ngFor="let task of tasks"
-        >
-          <mat-card-title>{{ task.title }}</mat-card-title>
-          <mat-card-content>
-            <p *ngIf="task.description">{{ task.description }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            <button mat-button>
-              Voltar para In Progress
-            </button>
-            <button mat-button color="warn">
-              Excluir
-            </button>
-          </mat-card-actions>
+          *ngFor="let task of tasks">
+           @if(task.status == TaskItemStatus.Done){
+             <mat-card-title>{{ task.title }}</mat-card-title>
+             <mat-card-content>
+               <p *ngIf="task.description">{{ task.description }}</p>
+             </mat-card-content>
+             <mat-card-actions>
+               <button mat-button>
+                 Voltar para In Progress
+               </button>
+               <button mat-button color="warn" (click)="deleteTask(task.id)">
+                 Excluir
+               </button>
+             </mat-card-actions>
+          }
         </mat-card>
       </ng-container>
     </div>

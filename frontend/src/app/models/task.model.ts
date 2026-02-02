@@ -1,20 +1,20 @@
-export enum TaskStatus {
-    ToDo = 0,
-    InProgress = 1,
-    Done = 2,
+export enum TaskItemStatus {
+    ToDo = 1,
+    InProgress = 2,
+    Done = 3,
 }
 
 export enum TaskPriority {
-    Low = 0,
-    Medium = 1,
-    High = 2,
+    Low = 1,
+    Medium = 2,
+    High = 3,
 }
 
 export interface Task {
     id: number;
     title: string;
     description?: string;
-    status: TaskStatus;
+    status: TaskItemStatus;
     priority: TaskPriority;
     createdAt: Date;
     updatedAt: Date;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Task, TaskStatus, TaskPriority } from '../models/task.model';
+import { Task, TaskItemStatus, TaskPriority } from '../models/task.model';
 import { HttpClient } from '@angular/common/http';
 import { CreateTask } from '../models/create-task';
 import { UpdateTask } from '../models/update-task';
@@ -11,7 +11,8 @@ const STORAGE_KEY = 'taskflow_tasks';
   providedIn: 'root'
 })
 export class TaskService {
-  private apiUrl = 'https://localhost:7217/api/Tasks';
+  // private apiUrl = 'https://localhost:7217/api/Tasks';
+  private apiUrl = 'https://localhost:44348/api/Tasks';
 
   private tasks: Task[] = [];
   private tasksSubject = new BehaviorSubject<Task[]>([]);

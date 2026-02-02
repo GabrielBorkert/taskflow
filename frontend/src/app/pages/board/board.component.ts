@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TaskService } from '../../services/task.service';
-import { Task } from '../../models/task.model';
+import { Task, TaskItemStatus } from '../../models/task.model';
 import { CreateTask } from '../../models/create-task';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,22 +20,24 @@ import { UpdateTask } from '../../models/update-task';
     MatCardModule, MatButtonModule, MatInputModule, MatIconModule,]
 })
 export class BoardComponent implements OnInit {
- tasks: Task[] = [];
+  tasks: Task[] = [];
   loading = false;
   error: string | null = null;
 
   constructor(private taskService: TaskService) {}
 
   ngOnInit(): void {
-    // this.loadTasks();
+    this.loadTasks();
   }
 
   // #region Variables
   public form: FormGroup = new FormGroup({
     title: new FormControl<string | null>(null, [Validators.required]),
-    description: new FormControl<string | null>(null, [Validators.required])
+    description: new FormControl<string | null>(null, [Validators.required]),
+    status: new FormControl<TaskItemStatus>(TaskItemStatus.ToDo)
   });
   
+  public TaskItemStatus = TaskItemStatus;
   // #endregion Variables
 
   loadTasks(): void {
@@ -60,7 +62,7 @@ export class BoardComponent implements OnInit {
       this.taskService.createTask(this.form.getRawValue()).subscribe({
         next: (task) => {
           console.log('Task criada:', task);
-          this.loadTasks(); // Recarrega a lista
+          this.loadTasks();
         },
         error: (err) => {
           console.error('Erro ao criar task:', err);
