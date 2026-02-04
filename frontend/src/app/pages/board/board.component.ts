@@ -10,6 +10,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { UpdateTask } from '../../models/update-task';
+import { Priority, TaskPriority } from '../../models/priorities-task';
+import {MatRadioModule} from '@angular/material/radio';
 
 @Component({
   selector: 'app-board',
@@ -17,10 +19,11 @@ import { UpdateTask } from '../../models/update-task';
   styleUrls: ['./board.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, DatePipe, MatToolbarModule, ReactiveFormsModule,
-    MatCardModule, MatButtonModule, MatInputModule, MatIconModule,]
+    MatCardModule, MatButtonModule, MatInputModule, MatIconModule, MatRadioModule]
 })
 export class BoardComponent implements OnInit {
-  tasks: Task[] = [];
+  public tasks: Task[] = [];
+  public priorities: Priority[] = [];
   loading = false;
   error: string | null = null;
 
@@ -34,10 +37,12 @@ export class BoardComponent implements OnInit {
   public form: FormGroup = new FormGroup({
     title: new FormControl<string | null>(null, [Validators.required]),
     description: new FormControl<string | null>(null, [Validators.required]),
-    status: new FormControl<TaskItemStatus>(TaskItemStatus.ToDo)
+    status: new FormControl<TaskItemStatus>(TaskItemStatus.ToDo),
+    priority: new FormControl<TaskPriority>(TaskPriority.Media),
   });
   
   public TaskItemStatus = TaskItemStatus;
+  public TaskPriority = TaskPriority;
   // #endregion Variables
 
   loadTasks(): void {
@@ -48,6 +53,8 @@ export class BoardComponent implements OnInit {
       next: (data) => {
         this.tasks = data;
         this.loading = false;
+        
+        this.getAllPriorities();
       },
       error: (err) => {
         this.error = 'Erro ao carregar tasks: ' + err.message;
@@ -55,6 +62,19 @@ export class BoardComponent implements OnInit {
         console.error('Erro:', err);
       }
     });
+  }
+
+  getAllPriorities(): void {
+    this.taskService.getAllPriorities().subscribe({
+      next: (data) => {
+        this.priorities = [...data];
+      },
+      error: (err) => {
+        this.error = 'Erro ao carregar as prioridades: ' + err.message;
+        this.loading = false;
+        console.error('Erro:', err);
+      }
+    })
   }
 
   createTask(): void {

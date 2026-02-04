@@ -19,6 +19,34 @@
             <textarea matInput rows="3" formControlName="description"></textarea>
           </mat-form-field>
 
+          <!-- <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Prioridade</mat-label>
+            <mat-radio-group formControlName="priorityId" class="priorities-radio-group">
+              <mat-radio-button 
+                *ngFor="let priority of priorities" 
+                [value]="priority.Id"
+                class="priority-radio">
+                <span class="priority-badge" [style.background-color]="priority.Color">
+                  {{ priority.Name }}
+                </span>
+              </mat-radio-button>
+            </mat-radio-group>
+          </mat-form-field> -->
+          <div class="priority-section">
+
+            <label class="priority-label">Prioridade</label>
+            <mat-radio-group formControlName="priority" class="priorities-radio-group">
+              <mat-radio-button 
+                *ngFor="let priority of priorities" 
+                [value]="priority.id"
+                class="priority-radio">
+                <span class="priority-badge" [style.background-color]="priority.color">
+                  {{ priority.name }}
+                </span>
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
           <div style="text-align: center;">
             <button class="btn-primary" (click)="createTask()">
               Adicionar
