@@ -2,6 +2,7 @@
 using TaskFlow.Domain.Entities;
 using TaskFlow.Infrastructure.Data;
 using TaskFlow.Application.Interfaces;
+using TaskFlow.Domain.Enums;
 
 namespace TaskFlow.Infrastructure.Repositories
 {
@@ -18,6 +19,13 @@ namespace TaskFlow.Infrastructure.Repositories
         {
             return await _context.Tasks
                 .OrderByDescending(t => t.CreatedAt)
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<PrioritiesEntity>> GetAllPrioritiesAsync()
+        {
+            return await _context.Priorities
+                .OrderBy(p => p.DisplayOrder)
                 .ToListAsync();
         }
 

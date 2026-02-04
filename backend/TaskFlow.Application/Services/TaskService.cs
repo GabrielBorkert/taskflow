@@ -16,13 +16,19 @@ namespace TaskFlow.Application.Services
         public async Task<IEnumerable<TaskDto>> GetAllTasksAsync()
         {
             var tasks = await _taskRepository.GetAllAsync();
-            return tasks.Select(t => MapToDto(t));
+            return tasks.Select(t => MapToDtoTask(t));
+        }
+
+        public async Task<IEnumerable<PrioritiesDto>> GetAllPrioritiesAsync()
+        {
+            var priorities = await _taskRepository.GetAllPrioritiesAsync();
+            return priorities.Select(t => MapToDtoPriority(t));
         }
 
         public async Task<TaskDto?> GetTaskByIdAsync(int id)
         {
             var task = await _taskRepository.GetByIdAsync(id);
-            return task != null ? MapToDto(task) : null;
+            return task != null ? MapToDtoTask(task) : null;
         }
 
         public async Task<TaskDto> CreateTaskAsync(CreateTaskDto createTaskDto)
@@ -34,10 +40,11 @@ namespace TaskFlow.Application.Services
                 IsCompleted = false,
                 CreatedAt = DateTime.UtcNow,
                 Status = createTaskDto.Status,
+                PriorityId = createTaskDto.Priority,
             };
 
             var createdTask = await _taskRepository.CreateAsync(task);
-            return MapToDto(createdTask);
+            return MapToDtoTask(createdTask);
         }
 
         public async Task<TaskDto?> UpdateTaskAsync(int id, UpdateTaskDto updateTaskDto)
@@ -60,7 +67,7 @@ namespace TaskFlow.Application.Services
             }
 
             var updatedTask = await _taskRepository.UpdateAsync(task);
-            return MapToDto(updatedTask);
+            return MapToDtoTask(updatedTask);
         }
 
         public async Task<bool> DeleteTaskAsync(int id)
@@ -69,7 +76,7 @@ namespace TaskFlow.Application.Services
         }
 
         // Método auxiliar para mapear Entity → DTO
-        private static TaskDto MapToDto(TaskEntity task)
+        private static TaskDto MapToDtoTask(TaskEntity task)
         {
             return new TaskDto
             {
@@ -79,6 +86,18 @@ namespace TaskFlow.Application.Services
                 IsCompleted = task.IsCompleted,
                 CreatedAt = task.CreatedAt,
                 Status = (int)task.Status,
+                Priority = (int)task.PriorityId,
+            };
+        }
+
+        private static PrioritiesDto MapToDtoPriority(PrioritiesEntity priorities)
+        {
+            return new PrioritiesDto
+            {
+                Id = priorities.Id,
+                Name = priorities.Name,
+                Color= priorities.Color,
+                DisplayOrder= priorities.DisplayOrder,
             };
         }
     }

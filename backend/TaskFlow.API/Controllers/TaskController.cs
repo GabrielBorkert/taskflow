@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces;
+using TaskFlow.Domain.Enums;
 
 namespace TaskFlow.API.Controllers
 {
@@ -15,16 +16,21 @@ namespace TaskFlow.API.Controllers
             _taskService = taskService;
         }
 
-        // GET: api/tasks
-        [HttpGet]
+        [HttpGet("GetAllTasks")]
         public async Task<ActionResult<IEnumerable<TaskDto>>> GetAllTasks()
         {
             var tasks = await _taskService.GetAllTasksAsync();
             return Ok(tasks);
         }
 
-        // GET: api/tasks/5
-        [HttpGet("{id}")]
+        [HttpGet("GetAllPriorities")]
+        public async Task<ActionResult<IEnumerable<PrioritiesDto>>> GetAllPriorities()
+        {
+            var priorities = await _taskService.GetAllPrioritiesAsync();
+            return Ok(priorities);
+        }
+
+        [HttpGet("GetTaskById/{id}")]
         public async Task<ActionResult<TaskDto>> GetTaskById(int id)
         {
             var task = await _taskService.GetTaskByIdAsync(id);
@@ -35,8 +41,7 @@ namespace TaskFlow.API.Controllers
             return Ok(task);
         }
 
-        // POST: api/tasks
-        [HttpPost]
+        [HttpPost("CreateTask")]
         public async Task<ActionResult<TaskDto>> CreateTask(CreateTaskDto createTaskDto)
         {
             if (!ModelState.IsValid)
@@ -46,8 +51,7 @@ namespace TaskFlow.API.Controllers
             return CreatedAtAction(nameof(GetTaskById), new { id = task.Id }, task);
         }
 
-        // PUT: api/tasks/5
-        [HttpPut("{id}")]
+        [HttpPut("UpdateTask/{id}")]
         public async Task<ActionResult<TaskDto>> UpdateTask(int id, [FromBody] UpdateTaskDto updateTaskDto)
         {
             if (!ModelState.IsValid)
@@ -61,8 +65,7 @@ namespace TaskFlow.API.Controllers
             return Ok(task);
         }
 
-        // DELETE: api/tasks/5
-        [HttpDelete("{id}")]
+        [HttpDelete("DeleteTask/{id}")]
         public async Task<ActionResult> DeleteTask(int id)
         {
             var result = await _taskService.DeleteTaskAsync(id);

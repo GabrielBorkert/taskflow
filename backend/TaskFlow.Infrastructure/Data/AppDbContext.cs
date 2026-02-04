@@ -11,6 +11,7 @@ namespace TaskFlow.Infrastructure.Data
 
         // DbSets - tabelas do banco
         public DbSet<TaskEntity> Tasks { get; set; }
+        public DbSet<PrioritiesEntity> Priorities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

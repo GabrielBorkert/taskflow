@@ -5,6 +5,7 @@ namespace TaskFlow.Application.Interfaces
     public interface ITaskService
     {
         Task<IEnumerable<TaskDto>> GetAllTasksAsync();
+        Task<IEnumerable<PrioritiesDto>> GetAllPrioritiesAsync();
         Task<TaskDto?> GetTaskByIdAsync(int id);
         Task<TaskDto> CreateTaskAsync(CreateTaskDto createTaskDto);
         Task<TaskDto?> UpdateTaskAsync(int id, UpdateTaskDto updateTaskDto);

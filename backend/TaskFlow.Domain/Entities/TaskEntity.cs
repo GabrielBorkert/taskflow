@@ -16,5 +16,6 @@ namespace TaskFlow.Domain.Entities
         public DateTime CreatedAt { get; set; }
         public DateTime? CompletedAt { get; set; }
         public TaskItemStatus Status { get; set; }
+        public TaskPriority PriorityId { get; set; }
     }
 }

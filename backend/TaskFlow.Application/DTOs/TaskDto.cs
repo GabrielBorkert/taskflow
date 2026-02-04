@@ -15,14 +15,15 @@ namespace TaskFlow.Application.DTOs
         public bool IsCompleted { get; set; }
         public DateTime CreatedAt { get; set; }
         public int Status { get; set; }
+        public int Priority { get; set; }
     }
 
     public class CreateTaskDto
     {
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-
         public TaskItemStatus Status { get; set; } = 0;
+        public TaskPriority Priority  { get; set; } = 0;
     }
 
     public class UpdateTaskDto
