@@ -44,7 +44,7 @@ export class TaskService {
   }
 
   // PUT - Atualizar task
-  updateTask(id: number, task: UpdateTask): Observable<Task> {
+  updateTask(id: number, task: Task): Observable<Task> {
     return this.http.put<Task>(`${this.apiUrl}/UpdateTask/${id}`, task);
   }
 

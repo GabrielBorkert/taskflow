@@ -18,20 +18,6 @@
             <mat-label>Descrição (opcional)</mat-label>
             <textarea matInput rows="3" formControlName="description"></textarea>
           </mat-form-field>
-
-          <!-- <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Prioridade</mat-label>
-            <mat-radio-group formControlName="priorityId" class="priorities-radio-group">
-              <mat-radio-button 
-                *ngFor="let priority of priorities" 
-                [value]="priority.Id"
-                class="priority-radio">
-                <span class="priority-badge" [style.background-color]="priority.Color">
-                  {{ priority.Name }}
-                </span>
-              </mat-radio-button>
-            </mat-radio-group>
-          </mat-form-field> -->
           <div class="priority-section">
 
             <label class="priority-label">Prioridade</label>
@@ -62,24 +48,42 @@
       <h3>To Do</h3>
       <ng-container *ngIf="tasks">
         <mat-card
-          class="task-card p-2"
+          class="task-card"
+          [ngClass]="'priority-' + task.priority"
           *ngFor="let task of tasks">
           @if(task.status == TaskItemStatus.ToDo){
-            <mat-card-title>{{ task.title }}</mat-card-title>
-            <mat-card-subtitle *ngIf="task.createdAt">
-              Criada em: {{ task.createdAt | date: 'short' }}
-            </mat-card-subtitle>
+            <mat-card-header>
+              <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
+            </mat-card-header>
+            
             <mat-card-content>
-              <p *ngIf="task.description">{{ task.description }}</p>
+              <p class="task-description" *ngIf="task.description">
+                {{ task.description }}
+              </p>
+              
+              <div class="task-footer">
+                <span class="task-date" *ngIf="task.createdAt">
+                  <mat-icon class="date-icon">event</mat-icon>
+                  {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </span>
+                
+                <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
+                  {{ getPriorityName(task.priority) }}
+                </span>
+              </div>
             </mat-card-content>
-            <mat-card-actions>
-              <button mat-button color="primary">
+            
+            <mat-card-actions class="card-actions">
+              <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.InProgress)">
+                <mat-icon>schedule</mat-icon>
                 In Progress
               </button>
-              <button mat-button color="primary">  
+              <button mat-button color="primary" (click)="editTask(task)">
+                <mat-icon>edit</mat-icon>
                 Editar                  
               </button>
               <button mat-button color="warn" (click)="deleteTask(task.id)">
+                <mat-icon>delete</mat-icon>
                 Excluir
               </button>
             </mat-card-actions>
@@ -90,7 +94,7 @@
 
     <div class="column">
       <h3>In Progress</h3>
-      <ng-container *ngIf="tasks">
+      <!-- <ng-container *ngIf="tasks">
         <mat-card
           class="task-card p-2"
           *ngFor="let task of tasks">
@@ -112,12 +116,60 @@
             </mat-card-actions>
           }
         </mat-card>
+      </ng-container> -->
+       <ng-container *ngIf="tasks">
+        <mat-card
+          class="task-card"
+          [ngClass]="'priority-' + task.priority"
+          *ngFor="let task of tasks">
+          @if(task.status == TaskItemStatus.InProgress){
+            <mat-card-header>
+              <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <p class="task-description" *ngIf="task.description">
+                {{ task.description }}
+              </p>
+              
+              <div class="task-footer">
+                <span class="task-date" *ngIf="task.createdAt">
+                  <mat-icon class="date-icon">event</mat-icon>
+                  {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </span>
+                
+                <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
+                  {{ getPriorityName(task.priority) }}
+                </span>
+              </div>
+            </mat-card-content>
+            
+            <mat-card-actions class="card-actions">
+              <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.ToDo)">
+                <mat-icon>check_box_outline_blank</mat-icon>
+                To Do
+              </button>
+              <button mat-button color="primary" (click)="editTask(task)">
+                <mat-icon>edit</mat-icon>
+                Editar                  
+              </button>
+              <!-- <button mat-button color="warn" (click)="deleteTask(task.id)">
+                <mat-icon>delete</mat-icon>
+                Excluir
+              </button> -->
+              <button mat-button color="warn" (click)="editTask(task, TaskItemStatus.Done)">
+                <mat-icon>task_alt</mat-icon>
+                Done
+              </button>
+            </mat-card-actions>
+          }
+        </mat-card>
       </ng-container>
     </div>
 
     <div class="column">
       <h3>Done</h3>
-      <ng-container *ngIf="tasks">
+      <!-- <ng-container *ngIf="tasks">
         <mat-card
           class="task-card p-2"
           *ngFor="let task of tasks">
@@ -134,6 +186,50 @@
                  Excluir
                </button>
              </mat-card-actions>
+          }
+        </mat-card>
+      </ng-container> -->
+       <ng-container *ngIf="tasks">
+        <mat-card
+          class="task-card"
+          [ngClass]="'priority-' + task.priority"
+          *ngFor="let task of tasks">
+          @if(task.status == TaskItemStatus.Done){
+            <mat-card-header>
+              <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
+            </mat-card-header>
+            
+            <mat-card-content>
+              <p class="task-description" *ngIf="task.description">
+                {{ task.description }}
+              </p>
+              
+              <div class="task-footer">
+                <span class="task-date" *ngIf="task.createdAt">
+                  <mat-icon class="date-icon">event</mat-icon>
+                  {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                </span>
+                
+                <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
+                  {{ getPriorityName(task.priority) }}
+                </span>
+              </div>
+            </mat-card-content>
+            
+            <mat-card-actions class="card-actions">
+              <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.InProgress)">
+                <mat-icon>schedule</mat-icon>
+                In Progress
+              </button>
+              <!-- <button mat-button color="primary" (click)="editTask(task)">
+                <mat-icon>edit</mat-icon>
+                Editar                  
+              </button> -->
+              <button mat-button color="warn" (click)="deleteTask(task.id)">
+                <mat-icon>delete</mat-icon>
+                Excluir
+              </button>
+            </mat-card-actions>
           }
         </mat-card>
       </ng-container>

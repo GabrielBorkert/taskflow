@@ -12,6 +12,10 @@ import { MatInputModule } from '@angular/material/input';
 import { UpdateTask } from '../../models/update-task';
 import { Priority, TaskPriority } from '../../models/priorities-task';
 import {MatRadioModule} from '@angular/material/radio';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { EditTaskComponent } from '../edit-task/edit-task.component';
+import { emitDistinctChangesOnlyDefaultValue } from '@angular/compiler';
+import { NotificationService } from '../../shared/services/notification.service';
 
 @Component({
   selector: 'app-board',
@@ -19,7 +23,7 @@ import {MatRadioModule} from '@angular/material/radio';
   styleUrls: ['./board.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, DatePipe, MatToolbarModule, ReactiveFormsModule,
-    MatCardModule, MatButtonModule, MatInputModule, MatIconModule, MatRadioModule]
+    MatCardModule, MatButtonModule, MatInputModule, MatIconModule, MatRadioModule, MatDialogModule]
 })
 export class BoardComponent implements OnInit {
   public tasks: Task[] = [];
@@ -27,10 +31,27 @@ export class BoardComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  constructor(private taskService: TaskService) {}
+  constructor(
+    private taskService: TaskService,
+    private modalService: MatDialog,
+    private notificationService: NotificationService,
+  ) {}
 
   ngOnInit(): void {
     this.loadTasks();
+  }
+
+  getPriorityColor(priorityId: number): string {
+    const priority = this.priorities.find(p => p.id === priorityId);
+    return priority?.color || '#94a3b8'; // cinza como fallback
+  }
+
+  /**
+   * Retorna o nome da prioridade baseado no ID
+   */
+  getPriorityName(priorityId: number): string {
+    const priority = this.priorities.find(p => p.id === priorityId);
+    return priority?.name || 'Sem prioridade';
   }
 
   // #region Variables
@@ -72,7 +93,7 @@ export class BoardComponent implements OnInit {
       error: (err) => {
         this.error = 'Erro ao carregar as prioridades: ' + err.message;
         this.loading = false;
-        console.error('Erro:', err);
+        this.notificationService.error('Erro ao carregar as prioridades!');
       }
     })
   }
@@ -81,11 +102,11 @@ export class BoardComponent implements OnInit {
     if(this.form.valid){
       this.taskService.createTask(this.form.getRawValue()).subscribe({
         next: (task) => {
-          console.log('Task criada:', task);
+          this.notificationService.success('Tarefa criada com sucesso!');
           this.loadTasks();
         },
         error: (err) => {
-          console.error('Erro ao criar task:', err);
+          this.notificationService.error('Erro ao criar tarefa!');
           this.error = 'Erro ao criar task';
         }
       });
@@ -96,11 +117,11 @@ export class BoardComponent implements OnInit {
     if (confirm('Deseja realmente deletar esta task?')) {
       this.taskService.deleteTask(id).subscribe({
         next: () => {
-          console.log('Task deletada');
+          this.notificationService.success('Tarefa excluída com sucesso!');
           this.loadTasks(); // Recarrega a lista
         },
         error: (err) => {
-          console.error('Erro ao deletar task:', err);
+          this.notificationService.error('Erro ao excluir tarefa!');
           this.error = 'Erro ao deletar task';
         }
       });
@@ -108,21 +129,48 @@ export class BoardComponent implements OnInit {
   }
 
   toggleComplete(task: Task): void {
-    const updateTask: UpdateTask = {
-      title: task.title,
-      description: task.description ?? '',
-      isCompleted: task.status
-    };
+    // const updateTask: UpdateTask = {
+    //   title: task.title,
+    //   description: task.description ?? '',
+    //   isCompleted: task.status
+    // };
 
-    this.taskService.updateTask(task.id, updateTask).subscribe({
+    this.taskService.updateTask(task.id, task).subscribe({
       next: () => {
-        console.log('Task atualizada');
+        this.notificationService.success('Tarefa atualizada com sucesso!');
         this.loadTasks(); // Recarrega a lista
       },
       error: (err) => {
-        console.error('Erro ao atualizar task:', err);
+        this.notificationService.error('Erro ao atualizar tarefa: ' + err);
         this.error = 'Erro ao atualizar task';
       }
     });
+  }
+
+  editTask(task: Task, newStatus: number = 0) {
+    task.status = newStatus != 0 ? newStatus : task.status;
+
+    if(newStatus == 0){
+      const modal = this.modalService.open(EditTaskComponent, { width: '500px', data: task });
+      
+      modal.afterClosed().subscribe(result => 
+      { 
+          if(result?.sucess) {
+            this.notificationService.success('Tarefa salva com sucesso!');
+            this.loadTasks
+          }
+      });
+    }
+    else{
+      this.taskService.updateTask(task.id, task).subscribe({
+        next: (task) => {
+          this.notificationService.success('Tarefa atualizada com sucesso!');
+          this.loadTasks();
+        },
+        error: (err) => {
+          this.notificationService.error('Erro ao tentar salvar tarefa!');
+        }
+      });
+    }
   }
 }
