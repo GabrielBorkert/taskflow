@@ -36,7 +36,7 @@ namespace TaskFlow.Infrastructure.Repositories
 
         public async Task<TaskEntity> CreateAsync(TaskEntity task)
         {
-            task.CreatedAt = DateTime.UtcNow;
+            task.CreatedAt = DateTime.Now;
             _context.Tasks.Add(task);
             await _context.SaveChangesAsync();
             return task;

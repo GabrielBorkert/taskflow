@@ -38,7 +38,7 @@ namespace TaskFlow.Application.Services
                 Title = createTaskDto.Title,
                 Description = createTaskDto.Description,
                 IsCompleted = false,
-                CreatedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.Now,
                 Status = createTaskDto.Status,
                 PriorityId = createTaskDto.Priority,
             };
@@ -56,10 +56,12 @@ namespace TaskFlow.Application.Services
             task.Title = updateTaskDto.Title;
             task.Description = updateTaskDto.Description;
             task.IsCompleted = updateTaskDto.IsCompleted;
+            task.Status = updateTaskDto.Status;
+            task.PriorityId = updateTaskDto.Priority;
 
             if (updateTaskDto.IsCompleted && task.CompletedAt == null)
             {
-                task.CompletedAt = DateTime.UtcNow;
+                task.CompletedAt = DateTime.Now;
             }
             else if (!updateTaskDto.IsCompleted)
             {
