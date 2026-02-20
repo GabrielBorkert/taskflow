@@ -40,7 +40,7 @@ namespace TaskFlow.Application.Services
                 IsCompleted = false,
                 CreatedAt = DateTime.Now,
                 Status = createTaskDto.Status,
-                PriorityId = createTaskDto.Priority,
+                Priority = createTaskDto.Priority,
             };
 
             var createdTask = await _taskRepository.CreateAsync(task);
@@ -57,7 +57,7 @@ namespace TaskFlow.Application.Services
             task.Description = updateTaskDto.Description;
             task.IsCompleted = updateTaskDto.IsCompleted;
             task.Status = updateTaskDto.Status;
-            task.PriorityId = updateTaskDto.Priority;
+            task.Priority = updateTaskDto.Priority;
 
             if (updateTaskDto.IsCompleted && task.CompletedAt == null)
             {
@@ -88,7 +88,7 @@ namespace TaskFlow.Application.Services
                 IsCompleted = task.IsCompleted,
                 CreatedAt = task.CreatedAt,
                 Status = (int)task.Status,
-                Priority = (int)task.PriorityId,
+                Priority = (int)task.Priority,
             };
         }
 
