@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces;
 using TaskFlow.Domain.Enums;
@@ -16,6 +17,7 @@ namespace TaskFlow.API.Controllers
             _taskService = taskService;
         }
 
+        [Authorize]
         [HttpGet("GetAllTasks")]
         public async Task<ActionResult<IEnumerable<TaskDto>>> GetAllTasks()
         {

@@ -7,10 +7,12 @@ namespace TaskFlow.Infrastructure.Services
     public class AuthService
     {
         private readonly AppDbContext _context;
+        private readonly JwtService _jwtService;
 
-        public AuthService(AppDbContext context)
+        public AuthService(AppDbContext context, JwtService jwtService)
         {
             _context = context;
+            _jwtService = jwtService;
         }
 
         public async Task<string> RegisterAsync(string name, string email, string password)
@@ -40,7 +42,7 @@ namespace TaskFlow.Infrastructure.Services
             if (user == null || !BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
                 throw new Exception("Credenciais inválidas.");
 
-            return "Login bem-sucedido.";
+            return _jwtService.GenerateToken(user);
         }
     }
 }
