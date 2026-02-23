@@ -13,6 +13,7 @@ namespace TaskFlow.Infrastructure.Data
         public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<PrioritiesEntity> Priorities { get; set; }
         public DbSet<UserEntity> Users { get; set; }
+        public DbSet<RefreshTokenEntity> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +45,16 @@ namespace TaskFlow.Infrastructure.Data
                     new PrioritiesEntity { Id = 4, Name = "Baixa", Color = "#10B981", DisplayOrder = 4 },
                     new PrioritiesEntity { Id = 5, Name = "Muito Baixa", Color = "#8B5CF6", DisplayOrder = 5 }
                 );
+            });
+
+            modelBuilder.Entity<RefreshTokenEntity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Token).IsRequired();
+                entity.HasOne(e => e.User)
+                      .WithMany()
+                      .HasForeignKey(e => e.UserId)
+                      .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }
