@@ -16,6 +16,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { EditTaskComponent } from '../edit-task/edit-task.component';
 import { emitDistinctChangesOnlyDefaultValue } from '@angular/compiler';
 import { NotificationService } from '../../shared/services/notification.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-board',
@@ -35,6 +37,8 @@ export class BoardComponent implements OnInit {
     private taskService: TaskService,
     private modalService: MatDialog,
     private notificationService: NotificationService,
+    private router: Router,
+    public authService: AuthService,
   ) {}
 
   ngOnInit(): void {
@@ -172,5 +176,18 @@ export class BoardComponent implements OnInit {
         }
       });
     }
+  }
+
+  logout(): void {
+    this.authService.logout().subscribe({
+      next: () => {
+        this.router.navigate(['/login']);
+      },
+      error: () => {
+        // mesmo com erro, limpa o localStorage e redireciona
+        localStorage.clear();
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }

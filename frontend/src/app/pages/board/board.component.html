@@ -1,5 +1,10 @@
 <mat-toolbar color="primary">
   <span>TaskFlow</span>
+  <span class="spacer"></span>
+  <button mat-button color="warn" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Sair
+  </button>
 </mat-toolbar>
 
 <div class="board-container">
@@ -81,7 +86,7 @@
                 <mat-icon>edit</mat-icon>
                 Editar
               </button>
-              <button mat-button color="warn" (click)="deleteTask(task.id)">
+              <button mat-button color="warn" *ngIf="authService.isAdmin()" (click)="deleteTask(task.id)">
                 <mat-icon>delete</mat-icon>
                 Excluir
               </button>
@@ -212,7 +217,7 @@
                 <mat-icon>schedule</mat-icon>
                 In Progress
               </button>
-              <button mat-button color="warn" (click)="deleteTask(task.id)">
+              <button mat-button color="warn" *ngIf="authService.isAdmin()" (click)="deleteTask(task.id)">
                 <mat-icon>delete</mat-icon>
                 Excluir
               </button>
