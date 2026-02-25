@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Application.Interfaces;
-using TaskFlow.Domain.Enums;
 
 namespace TaskFlow.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TasksController : ControllerBase
     {
         private readonly ITaskService _taskService;
@@ -17,7 +17,6 @@ namespace TaskFlow.API.Controllers
             _taskService = taskService;
         }
 
-        [Authorize]
         [HttpGet("GetAllTasks")]
         public async Task<ActionResult<IEnumerable<TaskDto>>> GetAllTasks()
         {
@@ -36,10 +35,8 @@ namespace TaskFlow.API.Controllers
         public async Task<ActionResult<TaskDto>> GetTaskById(int id)
         {
             var task = await _taskService.GetTaskByIdAsync(id);
-
             if (task == null)
                 return NotFound(new { message = $"Task com ID {id} não encontrada" });
-
             return Ok(task);
         }
 
@@ -48,7 +45,6 @@ namespace TaskFlow.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
             var task = await _taskService.CreateTaskAsync(createTaskDto);
             return CreatedAtAction(nameof(GetTaskById), new { id = task.Id }, task);
         }
@@ -58,23 +54,19 @@ namespace TaskFlow.API.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-
             var task = await _taskService.UpdateTaskAsync(id, updateTaskDto);
-
             if (task == null)
                 return NotFound(new { message = $"Task com ID {id} não encontrada" });
-
             return Ok(task);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteTask/{id}")]
         public async Task<ActionResult> DeleteTask(int id)
         {
             var result = await _taskService.DeleteTaskAsync(id);
-
             if (!result)
                 return NotFound(new { message = $"Task com ID {id} não encontrada" });
-
             return NoContent();
         }
     }

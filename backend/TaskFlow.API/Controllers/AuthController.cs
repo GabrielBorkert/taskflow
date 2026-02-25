@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application.DTOs;
 using TaskFlow.Infrastructure.Services;
 
@@ -64,6 +65,21 @@ namespace TaskFlow.API.Controllers
             {
                 await _authService.LogoutAsync(request.RefreshToken);
                 return Ok("Logout realizado com sucesso.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("register-admin")]
+        public async Task<IActionResult> RegisterAdmin([FromBody] RegisterRequest request)
+        {
+            try
+            {
+                var result = await _authService.RegisterAdminAsync(request.Name, request.Email, request.Password);
+                return Ok(result);
             }
             catch (Exception ex)
             {

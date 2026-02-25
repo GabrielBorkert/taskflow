@@ -101,5 +101,26 @@ namespace TaskFlow.Infrastructure.Services
             tokenEntity.IsRevoked = true;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<string> RegisterAdminAsync(string name, string email, string password)
+        {
+            bool emailExists = await _context.Users.AnyAsync(u => u.Email == email);
+            if (emailExists)
+                throw new Exception("Email já cadastrado.");
+
+            var user = new UserEntity
+            {
+                Name = name,
+                Email = email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(password),
+                Role = "Admin",
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return "Administrador criado com sucesso.";
+        }
     }
 }
