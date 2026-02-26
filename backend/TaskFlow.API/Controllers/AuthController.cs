@@ -38,9 +38,9 @@ namespace TaskFlow.API.Controllers
                 var result = await _authService.LoginAsync(request.Email, request.Password);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return Unauthorized("Credenciais inválidas.");
             }
         }
 
@@ -52,9 +52,9 @@ namespace TaskFlow.API.Controllers
                 var result = await _authService.RefreshTokenAsync(request.RefreshToken);
                 return Ok(result);
             }
-            catch (Exception ex)
+            catch
             {
-                return BadRequest(ex.Message);
+                return Unauthorized("Token inválido ou expirado.");
             }
         }
 
@@ -64,12 +64,10 @@ namespace TaskFlow.API.Controllers
             try
             {
                 await _authService.LogoutAsync(request.RefreshToken);
-                return Ok("Logout realizado com sucesso.");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            catch { }
+
+            return Ok("Logout realizado com sucesso.");
         }
 
         [Authorize(Roles = "Admin")]
