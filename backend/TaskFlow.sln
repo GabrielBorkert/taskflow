@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.1.11312.151 d18.0
+VisualStudioVersion = 18.1.11312.151
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.API", "TaskFlow.API\TaskFlow.API.csproj", "{65735EF4-2112-471F-B215-EF6067265E41}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.Application", "TaskFlow.Application\TaskFlow.Application.csproj", "{8AB59DD8-A4A9-4466-AB9B-72213BD07017}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.Infrastructure", "TaskFlow.Infrastructure\TaskFlow.Infrastructure.csproj", "{5E1AE2AF-9339-4C31-A4BD-8C14A053A9BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskFlow.Tests", "TaskFlow.Tests\TaskFlow.Tests.csproj", "{1A56AB8C-710B-4E28-B1FE-33003A778804}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -69,6 +71,18 @@ Global
 		{5E1AE2AF-9339-4C31-A4BD-8C14A053A9BF}.Release|x64.Build.0 = Release|Any CPU
 		{5E1AE2AF-9339-4C31-A4BD-8C14A053A9BF}.Release|x86.ActiveCfg = Release|Any CPU
 		{5E1AE2AF-9339-4C31-A4BD-8C14A053A9BF}.Release|x86.Build.0 = Release|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Debug|x64.Build.0 = Debug|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Debug|x86.Build.0 = Debug|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Release|x64.ActiveCfg = Release|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Release|x64.Build.0 = Release|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A56AB8C-710B-4E28-B1FE-33003A778804}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
