@@ -5,7 +5,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-	<PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -28,7 +27,6 @@
     <ProjectReference Include="..\TaskFlow.Application\TaskFlow.Application.csproj" />
     <ProjectReference Include="..\TaskFlow.Infrastructure\TaskFlow.Infrastructure.csproj" />
     <ProjectReference Include="..\TaskFlow.Domain\TaskFlow.Domain.csproj" />
-    <ProjectReference Include="..\TaskFlow.API\TaskFlow.API.csproj" />
   </ItemGroup>
 
 </Project>
