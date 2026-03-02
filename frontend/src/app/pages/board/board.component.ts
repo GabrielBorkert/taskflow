@@ -18,6 +18,9 @@ import { emitDistinctChangesOnlyDefaultValue } from '@angular/compiler';
 import { NotificationService } from '../../shared/services/notification.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+
 
 @Component({
   selector: 'app-board',
@@ -25,13 +28,17 @@ import { Router } from '@angular/router';
   styleUrls: ['./board.component.css'],
   standalone: true,
   imports: [CommonModule, FormsModule, DatePipe, MatToolbarModule, ReactiveFormsModule,
-    MatCardModule, MatButtonModule, MatInputModule, MatIconModule, MatRadioModule, MatDialogModule]
+    MatCardModule, MatButtonModule, MatInputModule, MatIconModule, MatRadioModule, MatDialogModule, DragDropModule]
 })
 export class BoardComponent implements OnInit {
   public tasks: Task[] = [];
   public priorities: Priority[] = [];
   loading = false;
   error: string | null = null;
+
+  todoTasks: Task[] = [];
+  inProgressTasks: Task[] = [];
+  doneTasks: Task[] = [];
 
   constructor(
     private taskService: TaskService,
@@ -80,6 +87,7 @@ export class BoardComponent implements OnInit {
         this.loading = false;
         
         this.getAllPriorities();
+        this.splitTasksByStatus();
       },
       error: (err) => {
         this.error = 'Erro ao carregar tasks: ' + err.message;
@@ -190,4 +198,30 @@ export class BoardComponent implements OnInit {
       }
     });
   }
+
+  // #region UTILITIES
+private splitTasksByStatus(): void {
+  this.todoTasks = this.tasks.filter(t => t.status === TaskItemStatus.ToDo);
+  this.inProgressTasks = this.tasks.filter(t => t.status === TaskItemStatus.InProgress);
+  this.doneTasks = this.tasks.filter(t => t.status === TaskItemStatus.Done);
+}
+
+onDrop(event: CdkDragDrop<Task[]>): void {
+  if (event.previousContainer === event.container) {
+    moveItemInArray(
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  } else {
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+    // próxima fase: persistir no backend
+  }
+}
+  // #endregion UTILITIES
 }

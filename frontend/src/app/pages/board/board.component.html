@@ -23,12 +23,12 @@
             <mat-label>Descrição</mat-label>
             <textarea matInput rows="3" formControlName="description"></textarea>
           </mat-form-field>
-          <div class="priority-section">
 
+          <div class="priority-section">
             <label class="priority-label">Prioridade</label>
             <mat-radio-group formControlName="priority" class="priorities-radio-group">
-              <mat-radio-button 
-                *ngFor="let priority of priorities" 
+              <mat-radio-button
+                *ngFor="let priority of priorities"
                 [value]="priority.id"
                 class="priority-radio">
                 <span class="priority-badge" [style.background-color]="priority.color">
@@ -49,181 +49,144 @@
   </form>
 
   <div class="board">
+
     <div class="column">
       <h3>To Do</h3>
-      <ng-container *ngFor="let task of tasks">
+      <div
+        cdkDropList
+        id="todo"
+        [cdkDropListData]="todoTasks"
+        [cdkDropListConnectedTo]="['inProgress', 'done']"
+        (cdkDropListDropped)="onDrop($event)"
+        class="drop-zone"
+      >
         <mat-card
+          *ngFor="let task of todoTasks"
+          cdkDrag
+          [cdkDragData]="task"
           class="task-card"
           [ngClass]="'priority-' + task.priority"
-          *ngIf="task.status == TaskItemStatus.ToDo">
-            <mat-card-header>
-              <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
-            </mat-card-header>
-
-            <mat-card-content>
-              <p class="task-description" *ngIf="task.description">
-                {{ task.description }}
-              </p>
-
-              <div class="task-footer">
-                <span class="task-date" *ngIf="task.createdAt">
-                  <mat-icon class="date-icon">event</mat-icon>
-                  {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
-                </span>
-
-                <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
-                  {{ getPriorityName(task.priority) }}
-                </span>
-              </div>
-            </mat-card-content>
-
-            <mat-card-actions class="card-actions">
-              <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.InProgress)">
-                <mat-icon>schedule</mat-icon>
-                In Progress
-              </button>
-              <button mat-button color="primary" (click)="editTask(task)">
-                <mat-icon>edit</mat-icon>
-                Editar
-              </button>
-              <button mat-button color="warn" *ngIf="authService.isAdmin()" (click)="deleteTask(task.id)">
-                <mat-icon>delete</mat-icon>
-                Excluir
-              </button>
-            </mat-card-actions>
+        >
+          <mat-card-header>
+            <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="task-description" *ngIf="task.description">{{ task.description }}</p>
+            <div class="task-footer">
+              <span class="task-date" *ngIf="task.createdAt">
+                <mat-icon class="date-icon">event</mat-icon>
+                {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+              </span>
+              <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
+                {{ getPriorityName(task.priority) }}
+              </span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions class="card-actions">
+            <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.InProgress)">
+              <mat-icon>schedule</mat-icon> In Progress
+            </button>
+            <button mat-button color="primary" (click)="editTask(task)">
+              <mat-icon>edit</mat-icon> Editar
+            </button>
+            <button mat-button color="warn" *ngIf="authService.isAdmin()" (click)="deleteTask(task.id)">
+              <mat-icon>delete</mat-icon> Excluir
+            </button>
+          </mat-card-actions>
         </mat-card>
-      </ng-container>
+      </div>
     </div>
 
     <div class="column">
       <h3>In Progress</h3>
-      <!-- <ng-container *ngIf="tasks">
+      <div
+        cdkDropList
+        id="inProgress"
+        [cdkDropListData]="inProgressTasks"
+        [cdkDropListConnectedTo]="['todo', 'done']"
+        (cdkDropListDropped)="onDrop($event)"
+        class="drop-zone"
+      >
         <mat-card
-          class="task-card p-2"
-          *ngFor="let task of tasks">
-          @if(task.status == TaskItemStatus.InProgress){
-            <mat-card-title>{{ task.title }}</mat-card-title>
-            <mat-card-content>
-              <p *ngIf="task.description">{{ task.description }}</p>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-button>
-                Voltar para To Do
-              </button>
-              <button mat-button color="primary">
-                Done
-              </button>
-              <button mat-button color="warn" (click)="deleteTask(task.id)">
-                Excluir
-              </button>
-            </mat-card-actions>
-          }
-        </mat-card>
-      </ng-container> -->
-      <ng-container *ngFor="let task of tasks">
-        <mat-card
+          *ngFor="let task of inProgressTasks"
+          cdkDrag
+          [cdkDragData]="task"
           class="task-card"
           [ngClass]="'priority-' + task.priority"
-          *ngIf="task.status == TaskItemStatus.InProgress">
-            <mat-card-header>
-              <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
-            </mat-card-header>
-
-            <mat-card-content>
-              <p class="task-description" *ngIf="task.description">
-                {{ task.description }}
-              </p>
-
-              <div class="task-footer">
-                <span class="task-date" *ngIf="task.createdAt">
-                  <mat-icon class="date-icon">event</mat-icon>
-                  {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
-                </span>
-
-                <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
-                  {{ getPriorityName(task.priority) }}
-                </span>
-              </div>
-            </mat-card-content>
-
-            <mat-card-actions class="card-actions">
-              <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.ToDo)">
-                <mat-icon>check_box_outline_blank</mat-icon>
-                To Do
-              </button>
-              <button mat-button color="primary" (click)="editTask(task)">
-                <mat-icon>edit</mat-icon>
-                Editar
-              </button>
-              <button mat-button color="warn" (click)="editTask(task, TaskItemStatus.Done)">
-                <mat-icon>task_alt</mat-icon>
-                Done
-              </button>
-            </mat-card-actions>
+        >
+          <mat-card-header>
+            <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="task-description" *ngIf="task.description">{{ task.description }}</p>
+            <div class="task-footer">
+              <span class="task-date" *ngIf="task.createdAt">
+                <mat-icon class="date-icon">event</mat-icon>
+                {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+              </span>
+              <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
+                {{ getPriorityName(task.priority) }}
+              </span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions class="card-actions">
+            <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.ToDo)">
+              <mat-icon>check_box_outline_blank</mat-icon> To Do
+            </button>
+            <button mat-button color="primary" (click)="editTask(task)">
+              <mat-icon>edit</mat-icon> Editar
+            </button>
+            <button mat-button color="warn" (click)="editTask(task, TaskItemStatus.Done)">
+              <mat-icon>task_alt</mat-icon> Done
+            </button>
+          </mat-card-actions>
         </mat-card>
-      </ng-container>
+      </div>
     </div>
 
     <div class="column">
       <h3>Done</h3>
-      <!-- <ng-container *ngIf="tasks">
+      <div
+        cdkDropList
+        id="done"
+        [cdkDropListData]="doneTasks"
+        [cdkDropListConnectedTo]="['todo', 'inProgress']"
+        (cdkDropListDropped)="onDrop($event)"
+        class="drop-zone"
+      >
         <mat-card
-          class="task-card p-2"
-          *ngFor="let task of tasks">
-           @if(task.status == TaskItemStatus.Done){
-             <mat-card-title>{{ task.title }}</mat-card-title>
-             <mat-card-content>
-               <p *ngIf="task.description">{{ task.description }}</p>
-             </mat-card-content>
-             <mat-card-actions>
-               <button mat-button>
-                 Voltar para In Progress
-               </button>
-               <button mat-button color="warn" (click)="deleteTask(task.id)">
-                 Excluir
-               </button>
-             </mat-card-actions>
-          }
-        </mat-card>
-      </ng-container> -->
-      <ng-container *ngFor="let task of tasks">
-        <mat-card
+          *ngFor="let task of doneTasks"
+          cdkDrag
+          [cdkDragData]="task"
           class="task-card"
           [ngClass]="'priority-' + task.priority"
-          *ngIf="task.status == TaskItemStatus.Done">
-            <mat-card-header>
-              <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
-            </mat-card-header>
-
-            <mat-card-content>
-              <p class="task-description" *ngIf="task.description">
-                {{ task.description }}
-              </p>
-
-              <div class="task-footer">
-                <span class="task-date" *ngIf="task.createdAt">
-                  <mat-icon class="date-icon">event</mat-icon>
-                  {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
-                </span>
-
-                <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
-                  {{ getPriorityName(task.priority) }}
-                </span>
-              </div>
-            </mat-card-content>
-
-            <mat-card-actions class="card-actions">
-              <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.InProgress)">
-                <mat-icon>schedule</mat-icon>
-                In Progress
-              </button>
-              <button mat-button color="warn" *ngIf="authService.isAdmin()" (click)="deleteTask(task.id)">
-                <mat-icon>delete</mat-icon>
-                Excluir
-              </button>
-            </mat-card-actions>
+        >
+          <mat-card-header>
+            <mat-card-title class="task-title">{{ task.title }}</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="task-description" *ngIf="task.description">{{ task.description }}</p>
+            <div class="task-footer">
+              <span class="task-date" *ngIf="task.createdAt">
+                <mat-icon class="date-icon">event</mat-icon>
+                {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+              </span>
+              <span class="priority-badge" [style.background-color]="getPriorityColor(task.priority)">
+                {{ getPriorityName(task.priority) }}
+              </span>
+            </div>
+          </mat-card-content>
+          <mat-card-actions class="card-actions">
+            <button mat-button color="primary" (click)="editTask(task, TaskItemStatus.InProgress)">
+              <mat-icon>schedule</mat-icon> In Progress
+            </button>
+            <button mat-button color="warn" *ngIf="authService.isAdmin()" (click)="deleteTask(task.id)">
+              <mat-icon>delete</mat-icon> Excluir
+            </button>
+          </mat-card-actions>
         </mat-card>
-      </ng-container>
+      </div>
     </div>
+
   </div>
 </div>

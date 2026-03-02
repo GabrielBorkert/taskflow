@@ -205,3 +205,7 @@ mat-card-content {
   flex: 1 1 auto;
 }
 
+.drop-zone {
+  min-height: 100px;
+  padding: 4px;
+}
