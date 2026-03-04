@@ -31,4 +31,8 @@
     <ProjectReference Include="..\TaskFlow.API\TaskFlow.API.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Integrations\" />
+  </ItemGroup>
+
 </Project>

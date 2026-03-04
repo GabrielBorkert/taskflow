@@ -2,6 +2,8 @@
 using TaskFlow.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using TaskFlow.Application.DTOs;
+using TaskFlow.Application.Interfaces;
+using TaskFlow.Application.Templates;
 
 namespace TaskFlow.Infrastructure.Services
 {
@@ -9,11 +11,13 @@ namespace TaskFlow.Infrastructure.Services
     {
         private readonly AppDbContext _context;
         private readonly JwtService _jwtService;
+        private readonly IEmailService _emailService;
 
-        public AuthService(AppDbContext context, JwtService jwtService)
+        public AuthService(AppDbContext context, JwtService jwtService, IEmailService emailService)
         {
             _context = context;
             _jwtService = jwtService;
+            _emailService = emailService;
         }
 
         public async Task<string> RegisterAsync(string name, string email, string password)
@@ -32,6 +36,10 @@ namespace TaskFlow.Infrastructure.Services
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            // Envia email de boas vindas
+            var htmlBody = WelcomeEmailTemplate.Generate(name);
+            await _emailService.SendEmailAsync(email, name, "Bem-vindo ao TaskFlow!", htmlBody);
 
             return "Usuário criado com sucesso.";
         }
@@ -69,10 +77,8 @@ namespace TaskFlow.Infrastructure.Services
             if (tokenEntity == null || tokenEntity.IsRevoked || tokenEntity.ExpiresAt < DateTime.UtcNow)
                 throw new Exception("Refresh token inválido ou expirado.");
 
-            // Revoga o token atual
             tokenEntity.IsRevoked = true;
 
-            // Gera novos tokens
             var newAccessToken = _jwtService.GenerateToken(tokenEntity.User);
             var newRefreshToken = _jwtService.GenerateRefreshToken();
 

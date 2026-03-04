@@ -9,6 +9,9 @@ using TaskFlow.Infrastructure.Data;
 using TaskFlow.Infrastructure.Repositories;
 using TaskFlow.Infrastructure.Services;
 using AspNetCoreRateLimit;
+using TaskFlow.Application.Interfaces;
+using TaskFlow.Infrastructure.Services;
+using TaskFlow.Application.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,6 +52,12 @@ builder.Services.AddScoped<ITaskRepository, TaskRepository>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<JwtService>();
+
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+
+builder.Services.AddScoped<IEmailService, EmailService>();
+
 
 builder.Services.AddCors(options =>
 {
